@@ -4,35 +4,12 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./backend/Dockerfile_spring
+      dockerfile: ./PLANU/Dockerfile
     expose:
       - 8080
-    ports:
-      - "8080:8080"
-    links:
-      - mysql_db:mysql_db
-    depends_on:
-      - mysql_db
+    network_mode: "host"
     volumes:
-      - ./build/libs/:/backend/
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_db:3306/PlanU?serverTimezone=Asia/Seoul
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
+      - ./build/libs/:/backend
     restart: always
     stdin_open: true
     tty: true
-
-  mysql_db:
-    image: mysql:latest
-    restart: always
-    volumes:
-      - ./mysql/db:/var/lib/mysql
-      - ./mysql/init:/docker-entrypoint-initdb.d/:ro
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=1234
-      - MYSQL_DATABASE=vestie
-      - MYSQL_ROOT=%
-      - MYSQL_PASSWORD=1234
